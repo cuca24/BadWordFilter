@@ -304,12 +304,9 @@ class BadWordFilter
                 }
 
                 if ($replaceWith === '*') {
-
-                    $fc = $word[0];
-                    $lc = $word[strlen($word) - 1];
                     $len = strlen($word);
 
-                    $newWord = $len > 3 ? $fc . str_repeat('*', $len - 2) . $lc : $fc . '**';
+                    $newWord =  str_repeat('*', $len);
 
                 } else {
 
