@@ -28,6 +28,8 @@ return array(
         'asswipe',
         'assholes',
         'pussy',
+        'dick',
+        'dickass',
         'faggot',
         'faggots',
         'fags',
@@ -48,6 +50,7 @@ return array(
     ),
     'lenient' => array(
         'ass',
+        'dumbass',
         'bitch',
         "bitch's",
         'bitches',
