@@ -135,13 +135,27 @@ class BadWordFilter
 
             $word = preg_quote($word);
 
-            if (preg_match($this->buildRegex($word), $string, $matchedString)) {
-
+            if (preg_match_all('/\b' . $word . '\b/im', $string, $matchedString, PREG_OFFSET_CAPTURE)) {
                 $badWords[] = $matchedString[0];
             }
         }
 
-        return $badWords;
+        $flattened = [];
+
+        foreach ($badWords as $badWord) {
+
+            foreach ($badWord as $singleBadWord) {
+                $flattened[] = $singleBadWord;
+            }
+        }
+
+        usort($flattened, [$this, 'sortBadWords']);
+
+        return $flattened;
+    }
+
+    public function sortBadWords($a, $b) {
+        return $b[1] - $a[1];
     }
 
 
@@ -298,22 +312,18 @@ class BadWordFilter
 
             foreach ($words as $word) {
 
-                if (!strlen($word)) {
-
+                if (!strlen($word[0])) {
                     continue;
                 }
 
-                if ($replaceWith === '*') {
-                    $len = strlen($word);
+                $len = strlen($word[0]);
+                $replaced = '';
 
-                    $newWord =  str_repeat('*', $len);
-
-                } else {
-
-                    $newWord = $replaceWith;
+                for ($i = 0; $i < $len; $i++) {
+                    $replaced .= $replaceWith;
                 }
 
-                $string = preg_replace("/$word/", $newWord, $string);
+                $string = substr_replace($string, $replaced, $word[1], $len);
             }
         }
 
